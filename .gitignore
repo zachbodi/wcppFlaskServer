@@ -5,3 +5,5 @@
 !.elasticbeanstalk/*.global.yml
 
 key.py
+flaskEnv
+__pycache__

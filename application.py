@@ -1,5 +1,5 @@
 from flask import Flask
-from key import KEY
+from key import KEY, sqluser, sqlpass
 import mysql.connector
 import requests
 import json
@@ -8,8 +8,8 @@ application = Flask(__name__)
 
 mydb = mysql.connector.connect(
 	host="wcppdatabase.ckosxabna9k7.us-east-2.rds.amazonaws.com",
-	user="admin",
-	passwd="Qf4Tzvi&7J##UxUgjDVz",
+	user=sqluser,
+	passwd=sqlpass,
 	database="appData"
 )
 
