@@ -25,6 +25,7 @@ def catch_all(path):
 	product = response.json()
     
 	try:
+		name = product["hints"][0]["food"]["label"]
 		ingredients = product["hints"][0]["food"]["foodContentsLabel"]
 		ingredients = ingredients.lower()
 		ingredients = ingredients[:ingredients.index('.')]
@@ -39,20 +40,20 @@ def catch_all(path):
 		ingredients = ingredients.replace(' and ',', ')
 		ingredients = ingredients.replace(",", ";")
 		ingredients = ingredients.split(";")
-		ingredients = [x.strip() for x in ingredients]
+		ingredients = [{"name":x.strip(), "light":"green"} for x in ingredients]
 
-		outputResponse = {"tested": []}
+		output = {"name":name, "ingredients":ingredients}
 		mycursor = mydb.cursor()
-		for ingredient in ingredients:
+		for i in range(len(ingredients)):
 			mycursor.execute("SELECT light FROM chemicals WHERE name LIKE '%{}%'")
 			sqlResponse = mycursor.fetchall()
 			for row in sqlResponse:
-				outputResponse.tested.append((ingredient, str(row)))
-		return str(outputResponse)
+				ingredients[i].light = str(row)
+		return str(json.dumps(output))
 	except:
 		if "error" in product:
 			return "null"
 		raise Exception("something went wrong in processing")
 
 if __name__ == "__main__":
-    application.run(host='0.0.0.0',port=8080,debug=True)
+    application.run()
